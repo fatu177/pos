@@ -66,15 +66,16 @@ active
                 </div>
                 <div class="form-floating col-6">
 
-                    <input type="number" name="qty" id="qty" placeholder="" class="form-control mb-3" required>
+                    <input type="number" name="qty" id="qty" placeholder="" onchange="hitungTotal()"
+                        class="form-control mb-3" required>
 
 
 
                     <label for="floatingInput">Kuantitas</label>
                 </div>
                 <div class="form-floating col-6">
-                    <input type="number" name="harga" id="harga" onchange="jumlah()" class="form-control mb-3"
-                        placeholder="" required>
+                    <input type="number" name="harga" id="harga" onchange="hitungTotal()" onchange="jumlah()"
+                        class="form-control mb-3" placeholder="" required>
                     <label for="floatingInput">harga Barang</label>
                 </div>
                 <div class="form-floating col-6">
@@ -94,11 +95,18 @@ active
                 </div>
             </div>
 
-        </div>
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
 
     </form>
 </div>
+<script>
+    function hitungTotal() {
+        var qty = document.getElementById('qty').value;
+        var harga = document.getElementById('harga').value;
+
+        var total = qty * harga;
+
+        // Format total menjadi dua desimal
+        document.getElementById('total_harga').value = total;
+    }
+</script>
 @endsection

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_kategori')->nullable()
             ->constrained('kategori_barangs', 'id')
-            ->cascadeOnUpdate()->nullOnDelete();
+            ->cascadeOnUpdate()->restrictOnDelete();
             $table->string('nama_barang');
             $table->string('satuan');
             $table->integer('qty');

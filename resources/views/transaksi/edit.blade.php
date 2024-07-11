@@ -6,94 +6,169 @@ active
 <div class="card">
     <div class="card-header">
         <h2>Tambah {{ $title }}</h2>
-
     </div>
-    <form action="{{ route('transaksi.update', $data->id) }}" method="post">
+    <form action="{{ route('transaksi.update',$data->id) }}" method="post">
         @csrf
         @method('PUT')
         <div class="card-body">
             <div class="row">
-
-
                 <div class="form-floating col-6">
                     <input type="text" class="form-control mb-3" name="kode_transaksi"
                         value="{{ $data->kode_transaksi }}" readonly>
                     <label for="floatingInput">NO. transaksi</label>
-
                 </div>
                 <div class="form-floating col-6">
-
-
                     <input type="date" class="form-control mb-3" name="tanggal_transaksi"
                         value="{{ $data->tanggal_transaksi }}" readonly required>
-
                     <label for="floatingInput">Tanggal Transaksi</label>
-
                 </div>
-
                 <div class="form-floating col-6">
-
-                    <select name="id_user" id="id_user" class="form-control mb-3" required>
-                        <option selected value="{{ $data->id }}">{{ $data->nama_lengkap }}</option>
-                        @foreach ($user as $a)
-                        <option value="{{ $a->id }}">{{ $a->nama_lengkap }}</option>
-                        @endforeach
+                    <select name="id_user" id="id_user" class="form-control mb-3" readonly required>
+                        <option selected value="{{ $data->user->id }}">{{ $data->user->nama_lengkap }}</option>
                     </select>
-                    <label for="floatingInput">Pilih Kasir</label>
+                    <label for="floatingInput">Kasir</label>
                 </div>
+
                 <div class="form-floating col-6">
-
-                    <select name="id_barang" id="id_barang" class="form-control mb-3" required>
-                        <option selected hidden value="">Pilih Barang</option>
-                        @foreach ($barang as $a)
-                        <option value="{{ $a->id }}">{{ $a->nama_barang }}</option>
-                        @endforeach
-                    </select>
-                    <label for="floatingInput">Pilih Barang</label>
-                </div>
-                <div class="form-floating col-6">
-
-                    <input type="number" name="jumlah" id="jumlah" placeholder="" class="form-control mb-3" required>
-
-
-
-                    <label for="floatingInput">Jumlah</label>
-                </div>
-                <div class="form-floating col-6">
-
-                    <input type="number" name="qty" id="qty" placeholder="" class="form-control mb-3" required>
-
-
-
-                    <label for="floatingInput">Kuantitas</label>
-                </div>
-                <div class="form-floating col-6">
-                    <input type="number" name="harga" id="harga" onchange="jumlah()" class="form-control mb-3"
-                        placeholder="" required>
-                    <label for="floatingInput">harga Barang</label>
-                </div>
-                <div class="form-floating col-6">
-                    <input type="number" name="nominal_bayar" id="nominal_bayar" class="form-control mb-3"
-                        placeholder="" required>
+                    <input type="number" name="nominal_bayar" id="nominal_bayar" onchange="hitungKembalian()"
+                        class="form-control mb-3" value="{{ $detail_penjualan->nominal_bayar }}" placeholder=""
+                        required>
                     <label for="floatingInput">Nominal Bayar</label>
                 </div>
                 <div class="form-floating col-6">
-                    <input type="text" name="total_harga" id="total_harga" class="form-control mb-3" placeholder=""
-                        required>
+                    <input type="text" name="total_harga" id="total_harga" onchange="hitungKembalian()"
+                        class="form-control mb-3" readonly placeholder="" value="{{ $detail_penjualan->total_harga }}">
                     <label for="floatingInput">Total Harga</label>
                 </div>
                 <div class="form-floating col-6">
-                    <input type="number" name="kembalian" id="kembalian" class="form-control mb-3" placeholder=""
-                        required>
+                    <input type="number" name="kembalian" value="{{ $detail_penjualan->kembalian }}" id="kembalian"
+                        class="form-control mb-3" readonly placeholder="">
                     <label for="floatingInput">Kembalian</label>
                 </div>
-            </div>
 
+                <table id="tabelDetail" class="table">
+                    <thead>
+                        <tr>
+                            <th>NO</th>
+                            <th>Barang</th>
+                            <th>Kuantitas</th>
+                            <th>Harga Barang</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyDetail">
+                        <tr id="barisDefault">
+                            <td>1</td>
+                            <td>
+                                <select name="id_barang[]" class="form-control mb-3" onchange="hargaBarang(this)">
+                                    <option value="">Pilih Barang</option>
+                                    @foreach ($barang as $a)
+                                    <option value="{{ $a->id }}">{{ $a->nama_barang }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <input type="number" name="qty[]" class="form-control mb-3" onchange="hitungTotal()"
+                                    required>
+                            </td>
+                            <td>
+                                <input type="text" name="harga[]" class="form-control mb-3" readonly>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    onclick="hapusBaris(this)">Hapus</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-success mb-3" onclick="tambahBaris()">Tambah Baris</button>
+            </div>
         </div>
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
-
     </form>
 </div>
+<script>
+    var nomorBaris = 1;
+
+    function tambahBaris() {
+        nomorBaris++;
+
+        var html = `
+        <tr id="baris${nomorBaris}">
+            <td>${nomorBaris}</td>
+            <td>
+                <select name="id_barang[]" class="form-control mb-3" onchange="hargaBarang(this)">
+                    <option value="">Pilih Barang</option>
+                    @foreach ($barang as $a)
+                    <option value="{{ $a->id }}">{{ $a->nama_barang }}</option>
+                    @endforeach
+                </select>
+            </td>
+            <td>
+                <input type="number" name="qty[]" class="form-control mb-3" onchange="hitungTotal()" required>
+            </td>
+            <td>
+                <input type="text" name="harga[]" class="form-control mb-3" readonly>
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm" onclick="hapusBaris('baris${nomorBaris}')">Hapus</button>
+            </td>
+        </tr>
+        `;
+
+        // Tambahkan baris baru ke dalam tabel
+        document.getElementById("tbodyDetail").insertAdjacentHTML("beforeend", html);
+    }
+
+    function hapusBaris(idBaris) {
+        // Hapus baris berdasarkan ID
+        document.getElementById(idBaris).remove();
+
+        // Update nomor urut kembali setelah menghapus
+        var nomorUrut = 1;
+        var tabel = document.getElementById("tbodyDetail");
+        Array.from(tabel.rows).forEach((row, index) => {
+            row.cells[0].innerText = nomorUrut++;
+        });
+    }
+
+    function hitungTotal() {
+        var rows = document.getElementById("tbodyDetail").getElementsByTagName("tr");
+        var total = 0;
+
+        for (var i = 0; i < rows.length; i++) {
+            var qty = rows[i].querySelector("input[name='qty[]']").value;
+            var harga = rows[i].querySelector("input[name='harga[]']").value;
+
+            if (qty && harga) {
+                total += parseFloat(qty) * parseFloat(harga);
+            }
+        }
+
+        document.getElementById("total_harga").value = total;
+        hitungKembalian();
+    }
+
+    function hitungKembalian() {
+        var bayar = document.getElementById('nominal_bayar').value;
+        var totalHarga = document.getElementById('total_harga').value;
+
+        var kembalian = parseFloat(bayar) - parseFloat(totalHarga);
+        document.getElementById('kembalian').value = kembalian;
+    }
+
+    function hargaBarang(select) {
+        var selectedBarang = select.value;
+        @foreach ($barang as $a)
+        if ("{{ $a->id }}" == selectedBarang) {
+            select.parentNode.parentNode.querySelector("input[name='harga[]']").value = "{{ $a->harga }}";
+        }
+        @endforeach
+
+        hitungTotal();
+    }
+</script>
 @endsection

@@ -6,6 +6,7 @@ use App\Models\barang;
 use App\Models\kategori_barang;
 use App\Models\level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class BarangController extends Controller
 {
@@ -88,7 +89,14 @@ class BarangController extends Controller
      */
     public function destroy(string $id)
     {
-        barang::find($id)->delete();
-        return redirect()->route('barang.index');
+        try {
+            barang::find($id)->delete();
+            return redirect()->route('barang.index');
+        // Logika untuk menyimpan data
+
+    } catch (\Exception $e) {
+        return Redirect::back()->withInput()->withErrors('Gagal menyimpan data.');
     }
+
+   }
 }

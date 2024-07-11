@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_user')->nullable()
             ->constrained('users', 'id')->cascadeOnUpdate()
-            ->nullOnDelete();
+            ->restrictOnDelete();
             $table->string('kode_transaksi')
             ->unique();
             $table->date('tanggal_transaksi');
+            $table->double('total_harga');
+            $table->double('nominal_bayar');
             $table->timestamps();
         });
     }

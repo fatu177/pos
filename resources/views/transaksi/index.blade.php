@@ -21,6 +21,8 @@ active
                         <th>NO</th>
                         <th>Nama Kasir</th>
                         <th>No Transaksi</th>
+                        <th>Nominal Bayar</th>
+                        <th>Kembalian</th>
                         <th>Tanggal Transaksi</th>
                         <th>Aksi</th>
                     </tr>
@@ -31,6 +33,8 @@ active
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $data->user->nama_lengkap }}</td>
                         <td>{{ $data->kode_transaksi }}</td>
+                        <td>{{ $data->nominal_bayar }}</td>
+                        <td>{{ $data->kembalian }}</td>
                         <td>{{ $data->tanggal_transaksi }}</td>
                         <td>
                             <a class="btn btn-primary" href="{{ route('transaksi.edit', $data->id) }}"><i

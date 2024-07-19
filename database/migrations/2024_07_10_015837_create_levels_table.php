@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('id_level')
             ->nullable()->after('id')
             ->constrained('levels', 'id')
-            ->cascadeOnUpdate()->nullOnDelete();
+            ->cascadeOnUpdate()->restrictOnDelete();
 
 
         });

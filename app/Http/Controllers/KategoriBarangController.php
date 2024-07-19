@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\barang;
 use App\Models\kategori_barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class KategoriBarangController extends Controller
 {
@@ -75,17 +76,13 @@ class KategoriBarangController extends Controller
      */
     public function destroy(string $id)
     {
-        $data = barang::where('id_kategori',$id);
-        if (isset($data)){
-
-            return redirect()->route('KategoriBarang.index')->messa;
-        }
+        try {
+        // Logika untuk menyimpan data
         kategori_barang::find($id)->delete();
         return redirect()->route('KategoriBarang.index');
+    } catch (\Exception $e) {
+        return Redirect::back()->withInput()->withErrors('Gagal menyimpan data.');
     }
-    public function cekbarang($id)
-    {
-
-
     }
+
 }

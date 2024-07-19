@@ -20,7 +20,13 @@ active
                     <label for="floatingInput">NO. transaksi</label>
                 </div>
                 <div hidden class="form-floating col-6">
+<<<<<<< HEAD
                     <input type="date" class="form-control mb-3" name="tanggal_transaksi" value="{{ date('Y-m-d') }}"
+=======
+                    <input type="date" class="form-control mb-3" name="tanggal_transaksi" value="{{
+
+                        date('Y-m-d') }}"
+>>>>>>> d354322306d1da8d4046f15a238825414d9add6c
                         required>
                     <label for="floatingInput">Tanggal Transaksi</label>
                 </div>
@@ -43,12 +49,16 @@ active
                     <label for="floatingInput">Pilih Barang</label>
                 </div>
                 <div class="form-floating col-6">
+<<<<<<< HEAD
                     <input type="number" name="jumlah" id="jumlah" placeholder="" class="form-control mb-3" required>
                     <label for="floatingInput">Jumlah</label>
                 </div>
                 <div class="form-floating col-6">
                     <input type="number" name="qty" id="qty" place
                     holder="" onchange="hitungTotal()"
+=======
+                    <input type="number" name="qty" id="qty" place holder="" onchange="hitungTotal()"
+>>>>>>> d354322306d1da8d4046f15a238825414d9add6c
                         class="form-control mb-3" required>
                     <label for="floatingInput">Kuantitas</label>
                 </div>

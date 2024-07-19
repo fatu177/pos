@@ -8,6 +8,7 @@ use App\Models\level;
 use App\Models\penjualan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class PenjualanController extends Controller
 {
@@ -47,9 +48,7 @@ class PenjualanController extends Controller
             'id_user' => 'required',
             'kode_transaksi' => 'required|unique:penjualans,kode_transaksi',
             'tanggal_transaksi' => 'required',
-
             'id_barang' => 'required',
-            'jumlah' => 'required',
             'qty' => 'required',
             'harga' => 'required',
             'total_harga' => 'required',
@@ -60,16 +59,15 @@ class PenjualanController extends Controller
             'nama_transaksi' => $request->nama_transaksi,
             'id_user' => $request->id_user,
             'kode_transaksi' => $request->kode_transaksi,
+            'total_harga' => $request->total_harga,
+            'nominal_bayar' => $request->nominal_bayar,
             'tanggal_transaksi' => $request->tanggal_transaksi,
         ]);
         $max = penjualan::select('id')->max('id');
         detail_penjualan::create([
             'id_barang' => $request->id_barang,
-            'jumlah' => $request->jumlah,
             'qty' => $request->qty,
             'harga' => $request->harga,
-            'total_harga' => $request->total_harga,
-            'nominal_bayar' => $request->nominal_bayar,
             'kembalian' => $request->kembalian,
             'id_penjualan' => $max,
         ]);
@@ -95,6 +93,12 @@ class PenjualanController extends Controller
         $user = User::get()->where('id_level',$kasir->id);
         $barang = barang::get();
         $detail_penjualan = detail_penjualan::where('id_penjualan', $id)->first();
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> d354322306d1da8d4046f15a238825414d9add6c
         return view('transaksi.edit', compact('title', 'data','user','barang','kasir','detail_penjualan'));
     }
 
@@ -103,11 +107,34 @@ class PenjualanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // $request->validate([
+        $request->validate([
+            'id_user' => 'required',
+            'kode_transaksi' => 'required',
+            'tanggal_transaksi' => 'required',
+            'id_barang' => 'required',
+            'qty' => 'required',
+            'harga' => 'required',
+            'total_harga' => 'required',
+            'nominal_bayar' => 'required',
+            'kembalian' => 'required',
+        ]);
+        penjualan::find($id)->update([
+            'nama_transaksi' => $request->nama_transaksi,
+            'id_user' => $request->id_user,
+            'kode_transaksi' => $request->kode_transaksi,
+            'kembalian' => $request->kembalian,
 
-        // ]);
+            'nominal_bayar' => $request->nominal_bayar,
+            'tanggal_transaksi' => $request->tanggal_transaksi,
+        ]);
+        $detail_penjualan = detail_penjualan::where('id_penjualan', $id)->first();
+        detail_penjualan::find($detail_penjualan->id)->update([
+            'id_barang' => $request->id_barang,
+            'qty' => $request->qty,
+            'harga' => $request->harga,
+            'total_harga' => $request->total_harga,
 
-        // penjualan::find($id)->update($request->all());
+        ]);
         return redirect()->route('transaksi.index');
     }
 
@@ -116,7 +143,13 @@ class PenjualanController extends Controller
      */
     public function destroy(string $id)
     {
+        try {
+        // Logika untuk menyimpan data
         penjualan::find($id)->delete();
         return redirect()->route('transaksi.index');
+
+    } catch (\Exception $e) {
+        return Redirect::back()->withInput()->withErrors('Gagal menyimpan data.');
+    }
     }
 }

@@ -16,16 +16,13 @@ return new class extends Migration
             $table->foreignId('id_penjualan')
             ->nullable()
             ->constrained('penjualans','id')
-            ->cascadeOnUpdate()->nullOnDelete();
+            ->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('id_barang')
             ->nullable()
             ->constrained('barangs','id')
-            ->cascadeOnUpdate()->nullOnDelete();
-            $table->integer('jumlah');
+            ->cascadeOnUpdate()->restrictOnDelete();
             $table->integer('qty');
             $table->double('harga');
-            $table->double('total_harga');
-            $table->double('nominal_bayar');
             $table->double('kembalian');
 
 

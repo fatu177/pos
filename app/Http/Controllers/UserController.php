@@ -6,6 +6,7 @@ use App\Models\level;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
@@ -92,7 +93,13 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
+        try {
+        // Logika untuk menyimpan data
         User::find($id)->delete();
         return redirect()->route('user.index');
+
+    } catch (\Exception $e) {
+        return Redirect::back()->withInput()->withErrors('Gagal menyimpan data.');
+    }
     }
 }

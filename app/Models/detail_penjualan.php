@@ -11,11 +11,10 @@ class detail_penjualan extends Model
     protected $fillable = [
         'id_penjualan',
         'id_barang',
-        'jumlah',
+    
         'qty',
         'harga',
-        'total_harga',
-        'nominal_bayar',
+
         'kembalian',
     ];
     public function penjualan()

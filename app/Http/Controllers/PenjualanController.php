@@ -94,7 +94,8 @@ class PenjualanController extends Controller
         $kasir = Level::where('nama_level', 'Kasir')->first();
         $user = User::get()->where('id_level',$kasir->id);
         $barang = barang::get();
-        return view('transaksi.edit', compact('title', 'data','user','barang'));
+        $detail_penjualan = detail_penjualan::where('id_penjualan', $id)->first();
+        return view('transaksi.edit', compact('title', 'data','user','barang','kasir','detail_penjualan'));
     }
 
     /**

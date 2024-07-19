@@ -13,6 +13,7 @@ use App\Http\Controllers\PenjualanController;
 //     return view('welcome');
 // });
 Route::get('/', [LoginController::class, 'index'])->name('login');
+Route::get('/api', [LoginController::class, 'json'])->name('json');
 Route::post('/', [LoginController::class, 'login'])->name('loginaction');
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {

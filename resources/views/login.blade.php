@@ -67,6 +67,8 @@
   <body>
     <!-- Content -->
 
+    <p>{{ Http::get('http://web_fathu_rahman_point_of_sales.test/api')[0] }}</p>
+
     <div class="container-xxl">
       <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner">

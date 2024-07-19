@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class LoginController extends Controller
 {
     public function index()
     {
-        return view('login');
+        $a = Http::get('http://web_fathu_rahman_point_of_sales.test/api');
+        return view('login',compact('a'));
     }
     public function login(Request $request)
     {
@@ -27,5 +29,8 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+   public function json() {
+return response(['a'],201);
     }
 }

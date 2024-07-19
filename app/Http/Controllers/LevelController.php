@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class LevelController extends Controller
 {
@@ -13,7 +14,8 @@ class LevelController extends Controller
     public function index()
     {
         $title = 'Level';
-        $data = level::get();
+        $data = level::all();
+        
         return view('level.index', compact('title', 'data'));
     }
 

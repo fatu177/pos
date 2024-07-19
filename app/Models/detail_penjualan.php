@@ -18,4 +18,12 @@ class detail_penjualan extends Model
         'nominal_bayar',
         'kembalian',
     ];
+    public function penjualan()
+    {
+        return $this->belongsTo(Penjualan::class, 'id_penjualan', 'id');
+    }
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'id_barang', 'id');
+    }
 }
